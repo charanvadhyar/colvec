@@ -61,14 +61,69 @@ print(f"Corpus: {NUM_DOCS} docs, {all_doc_vectors.shape[0]} tokens")
 
 # ---- Query encoder ----
 def encode_query(text, max_len=32):
-    inputs = tokenizer("[Q] " + text, return_tensors="pt",
-                       truncation=True, max_length=max_len).to(device)
-    with torch.no_grad():
-        out = model(**inputs).last_hidden_state[0]
-        out = linear(out)
-    out = out[1:-1]
-    return F.normalize(out, dim=1).cpu()
+    """
+    Encode a query, padding with [MASK] tokens up to max_len.
+    This is the query augmentation trick from the ColBERT paper.
+    """
+    # Step 1: tokenize WITHOUT padding to find natural query length
+    inputs = tokenizer(
+        "[Q] " + text,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_len,
+        padding=False,                      # ← we'll pad manually below
+    )
+    
+    input_ids = inputs["input_ids"][0]      # [num_tokens]
+    attention_mask = inputs["attention_mask"][0]
 
+
+    if not hasattr(encode_query, "_logged"):
+        print(f"\n[DEBUG] encode_query: input has {len(input_ids)} tokens, "
+              f"will pad to {max_len}, mask_token_id={tokenizer.mask_token_id}")
+        encode_query._logged = True
+    
+    # Step 2: pad with [MASK] up to max_len
+    # tokenizer.mask_token_id is the integer ID for [MASK] in BERT's vocab
+    n_real = len(input_ids)
+    n_pad = max_len - n_real
+    if n_pad > 0:
+        mask_padding = torch.full(
+            (n_pad,), tokenizer.mask_token_id, dtype=input_ids.dtype
+        )
+        input_ids = torch.cat([input_ids, mask_padding])
+        # CRITICAL: attention_mask must be ALL 1s, including for [MASK] tokens.
+        # ColBERT wants the model to attend to [MASK] tokens, not ignore them.
+        attention_mask = torch.cat([
+            attention_mask,
+            torch.ones(n_pad, dtype=attention_mask.dtype),
+        ])
+    
+    # Step 3: forward pass + projection
+    inputs = {
+        "input_ids": input_ids.unsqueeze(0).to(device),
+        "attention_mask": attention_mask.unsqueeze(0).to(device),
+    }
+    with torch.no_grad():
+        out = model(**inputs).last_hidden_state[0]    # [max_len, 768]
+        out = linear(out)                              # [max_len, 128]
+    
+    # Step 4: drop [CLS] (first) and [SEP] (somewhere in the middle now)
+    # Find the original [SEP] position before padding
+    sep_token_id = tokenizer.sep_token_id
+    
+    # Build a mask: keep everything EXCEPT [CLS] (position 0) and the original [SEP]
+    keep_mask = torch.ones(max_len, dtype=torch.bool)
+    keep_mask[0] = False                                # drop [CLS]
+    
+    # Find the original [SEP] in the unpadded portion
+    for i in range(n_real):
+        if input_ids[i] == sep_token_id:
+            keep_mask[i] = False                        # drop [SEP]
+            break
+    
+    out = out[keep_mask]                               # [num_kept, 128]
+    return F.normalize(out, dim=1).cpu()
 # ---- Brute force search (returns SciFact doc_ids) ----
 def search_bruteforce(query_text, top_k=100):
     Q = encode_query(query_text)
@@ -176,3 +231,9 @@ with open("benchmarks/results/scifact_history.jsonl", "a") as f:
     f.write(json.dumps(result_record) + "\n")
 
 print(f"Saved to benchmarks/results/scifact_history.jsonl")
+
+test_q = "vitamin D deficiency"
+Q = encode_query(test_q)
+print(f"Query: {test_q!r}")
+print(f"Output shape: {Q.shape}")          # Should be ~[30, 128] (32 - [CLS] - [SEP])
+print(f"First vector norm: {torch.norm(Q[0]):.4f}") 
