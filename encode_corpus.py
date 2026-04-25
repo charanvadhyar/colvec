@@ -32,7 +32,7 @@ linear = linear.to(device)
 print(f"Using device: {device}")
 
 # ---- Load corpus ----
-N_DOCS = 1000
+N_DOCS = 30000 # was 10000 previously scaled it to 30k for better results on ivf
 print(f"Loading {N_DOCS} passages from MS MARCO...")
 ds = load_dataset("ms_marco", "v2.1", split="train", streaming=True)
 
@@ -40,7 +40,7 @@ passages = []
 seen = set()
 for row in ds:
     for text in row["passages"]["passage_text"]:
-        if text not in seen:
+        if text not in seen:            # Avoid duplicate passages
             seen.add(text)
             passages.append(text)
             if len(passages) >= N_DOCS:

@@ -1,0 +1,1 @@
+{"timestamp": "2026-04-25T15:30:52.474000", "system": "bruteforce_maxsim", "dataset": "scifact", "num_queries": 300, "ndcg_at_10": 0.6122017180234313, "recall_at_100": 0.8665555555555555, "median_latency_ms": 108.41989999971702}
