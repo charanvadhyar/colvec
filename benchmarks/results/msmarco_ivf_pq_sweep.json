@@ -1,0 +1,77 @@
+{
+  "timestamp": "2026-04-26T16:19:08.590687",
+  "system": "ivf_pq_combined",
+  "dataset": "msmarco",
+  "num_docs": 30000,
+  "num_tokens": 2320219,
+  "K_IVF": 1024,
+  "M_PQ": 32,
+  "K_PQ": 256,
+  "bf_median_latency_ms": 156.07124999951338,
+  "sweep": [
+    {
+      "nprobe": 1,
+      "recall_at_10": 0.7,
+      "median_latency_ms": 52.06640000687912,
+      "mean_candidates": 16282.5,
+      "pct_corpus": 0.7017656522940291,
+      "speedup_vs_bf": 2.997542560632057
+    },
+    {
+      "nprobe": 2,
+      "recall_at_10": 0.725,
+      "median_latency_ms": 57.818250003037974,
+      "mean_candidates": 31651,
+      "pct_corpus": 1.3641384714115348,
+      "speedup_vs_bf": 2.6993423355309587
+    },
+    {
+      "nprobe": 4,
+      "recall_at_10": 0.775,
+      "median_latency_ms": 77.88214999891352,
+      "mean_candidates": 53401.75,
+      "pct_corpus": 2.301582307532177,
+      "speedup_vs_bf": 2.0039412111978243
+    },
+    {
+      "nprobe": 8,
+      "recall_at_10": 0.825,
+      "median_latency_ms": 93.75230001023738,
+      "mean_candidates": 94199.75,
+      "pct_corpus": 4.059950806367847,
+      "speedup_vs_bf": 1.6647191587029975
+    },
+    {
+      "nprobe": 16,
+      "recall_at_10": 0.8500000000000001,
+      "median_latency_ms": 135.70975000038743,
+      "mean_candidates": 164952.75,
+      "pct_corpus": 7.109361228401284,
+      "speedup_vs_bf": 1.1500371196547619
+    },
+    {
+      "nprobe": 32,
+      "recall_at_10": 0.8250000000000001,
+      "median_latency_ms": 272.4422500032233,
+      "mean_candidates": 305131.5,
+      "pct_corpus": 13.150978420571507,
+      "speedup_vs_bf": 0.5728599363632729
+    },
+    {
+      "nprobe": 64,
+      "recall_at_10": 0.8250000000000001,
+      "median_latency_ms": 513.2668499936699,
+      "mean_candidates": 543091.25,
+      "pct_corpus": 23.406896073172405,
+      "speedup_vs_bf": 0.3040742841690209
+    },
+    {
+      "nprobe": 128,
+      "recall_at_10": 0.8250000000000001,
+      "median_latency_ms": 899.5265499979723,
+      "mean_candidates": 941172.25,
+      "pct_corpus": 40.56394030046302,
+      "speedup_vs_bf": 0.17350377262334857
+    }
+  ]
+}
