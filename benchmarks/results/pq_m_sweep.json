@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-04-26T10:12:04.340076",
+  "experiment": "pq_m_sweep",
+  "dataset": "scifact",
+  "results": [
+    {
+      "M": 4,
+      "K": 256,
+      "chunk_dim": 32,
+      "compression": 128.0,
+      "storage_mb": 3.633972,
+      "ndcg_at_10": 0.47583378921902464,
+      "recall_at_100": 0.7376666666666667,
+      "median_latency_ms": 615.613800000574
+    },
+    {
+      "M": 8,
+      "K": 256,
+      "chunk_dim": 16,
+      "compression": 64.0,
+      "storage_mb": 7.267944,
+      "ndcg_at_10": 0.5553754696000902,
+      "recall_at_100": 0.7945555555555556,
+      "median_latency_ms": 1107.438250000996
+    },
+    {
+      "M": 16,
+      "K": 256,
+      "chunk_dim": 8,
+      "compression": 32.0,
+      "storage_mb": 14.535888,
+      "ndcg_at_10": 0.5778645747063667,
+      "recall_at_100": 0.8442222222222222,
+      "median_latency_ms": 2136.71505000093
+    },
+    {
+      "M": 32,
+      "K": 256,
+      "chunk_dim": 4,
+      "compression": 16.0,
+      "storage_mb": 29.071776,
+      "ndcg_at_10": 0.6123947731693058,
+      "recall_at_100": 0.8582222222222222,
+      "median_latency_ms": 4036.311249998107
+    },
+    {
+      "M": 64,
+      "K": 256,
+      "chunk_dim": 2,
+      "compression": 8.0,
+      "storage_mb": 58.143552,
+      "ndcg_at_10": 0.6114430255810114,
+      "recall_at_100": 0.8665555555555555,
+      "median_latency_ms": 8010.095999998157
+    }
+  ]
+}

@@ -73,16 +73,18 @@ def train_pq(
     return codebooks
 
 
-def encode_with_pq(vectors: np.ndarray, codebooks: np.ndarray) -> np.ndarray:
+def encode_with_pq(vectors: np.ndarray, codebooks: np.ndarray, batch_size: int = 50_000) -> np.ndarray:
     """
     Compress vectors using trained codebooks.
+    Batched to control memory — full unbatched version blows up at scale.
     
     Args:
         vectors:   [N, D] vectors to compress.
         codebooks: [M, K, D/M] trained codebooks.
+        batch_size: process this many vectors at a time. Lower = less RAM.
     
     Returns:
-        codes: [N, M] uint8 array — each vector represented as M bytes.
+        codes: [N, M] uint8 array.
     """
     N, D = vectors.shape
     M, K, chunk_dim = codebooks.shape
@@ -92,18 +94,30 @@ def encode_with_pq(vectors: np.ndarray, codebooks: np.ndarray) -> np.ndarray:
     codes = np.zeros((N, M), dtype=np.uint8)
     
     for m in range(M):
-        chunk = vectors[:, m * chunk_dim : (m + 1) * chunk_dim]   # [N, chunk_dim]
+        # Get this chunk's slice of all vectors and the codebook
+        codebook_m = codebooks[m]                                        # [K, chunk_dim]
         
-        # Distance from each vector's chunk to every codebook entry
-        # Broadcasting: chunk [N, 1, chunk_dim] - codebook [1, K, chunk_dim]
-        # → diffs [N, K, chunk_dim]
-        diffs = chunk[:, None, :] - codebooks[m][None, :, :]
-        dists = np.linalg.norm(diffs, axis=2)   # [N, K]
-        
-        codes[:, m] = dists.argmin(axis=1)
+        # Process in batches to keep memory bounded
+        for start in range(0, N, batch_size):
+            end = min(start + batch_size, N)
+            chunk = vectors[start:end, m * chunk_dim : (m + 1) * chunk_dim]   # [B, chunk_dim]
+            
+            # Compute squared distances using the identity:
+            # ||a - b||² = ||a||² + ||b||² - 2·a·b
+            # This is much more memory-efficient than building the diffs tensor.
+            #
+            # We don't need actual distances — argmin of squared distance is the
+            # same as argmin of distance (sqrt is monotonic). So skip the sqrt.
+            
+            chunk_sq    = (chunk ** 2).sum(axis=1, keepdims=True)        # [B, 1]
+            codebook_sq = (codebook_m ** 2).sum(axis=1, keepdims=True).T # [1, K]
+            cross       = chunk @ codebook_m.T                            # [B, K]
+            
+            sq_dists = chunk_sq + codebook_sq - 2 * cross                 # [B, K]
+            
+            codes[start:end, m] = sq_dists.argmin(axis=1).astype(np.uint8)
     
     return codes
-
 
 # ---- Run training on SciFact corpus ----
 if __name__ == "__main__":
