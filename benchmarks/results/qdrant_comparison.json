@@ -1,0 +1,89 @@
+{
+  "timestamp": "2026-04-27T10:37:38.514176",
+  "experiment": "qdrant_comparison_corrected",
+  "dataset": "scifact",
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "note": "full pipeline latency: encode + search for both systems",
+  "results": [
+    {
+      "name": "Your IVF+PQ (nprobe=4)",
+      "ndcg_at_10": 0.4983470316612423,
+      "recall_at_100": 0.6638888888888889,
+      "median_lat_ms": 10.902700000315235,
+      "p99_lat_ms": 19.604699999945296,
+      "p50_lat_ms": 10.90340000064316,
+      "system": "yours",
+      "setting": "nprobe=4"
+    },
+    {
+      "name": "Your IVF+PQ (nprobe=8)",
+      "ndcg_at_10": 0.5691709131838983,
+      "recall_at_100": 0.7855555555555556,
+      "median_lat_ms": 10.02749999952357,
+      "p99_lat_ms": 19.33149999968009,
+      "p50_lat_ms": 10.03229999969335,
+      "system": "yours",
+      "setting": "nprobe=8"
+    },
+    {
+      "name": "Your IVF+PQ (nprobe=16)",
+      "ndcg_at_10": 0.5965007979409903,
+      "recall_at_100": 0.8433333333333334,
+      "median_lat_ms": 10.958699999719101,
+      "p99_lat_ms": 17.99750000009226,
+      "p50_lat_ms": 10.973899999953574,
+      "system": "yours",
+      "setting": "nprobe=16"
+    },
+    {
+      "name": "Your IVF+PQ (nprobe=32)",
+      "ndcg_at_10": 0.6031262523840775,
+      "recall_at_100": 0.8666666666666667,
+      "median_lat_ms": 11.650049999843759,
+      "p99_lat_ms": 19.872799999575363,
+      "p50_lat_ms": 11.654199999611592,
+      "system": "yours",
+      "setting": "nprobe=32"
+    },
+    {
+      "name": "Qdrant HNSW (ef=32)",
+      "ndcg_at_10": 0.6484032131749053,
+      "recall_at_100": 0.925,
+      "median_lat_ms": 18.534500000441767,
+      "p99_lat_ms": 42.504099999860046,
+      "p50_lat_ms": 18.56910000060452,
+      "system": "qdrant",
+      "setting": "ef=32"
+    },
+    {
+      "name": "Qdrant HNSW (ef=64)",
+      "ndcg_at_10": 0.6484032131749053,
+      "recall_at_100": 0.925,
+      "median_lat_ms": 20.875700000033248,
+      "p99_lat_ms": 43.51779999979044,
+      "p50_lat_ms": 20.91920000020764,
+      "system": "qdrant",
+      "setting": "ef=64"
+    },
+    {
+      "name": "Qdrant HNSW (ef=128)",
+      "ndcg_at_10": 0.6484032131749053,
+      "recall_at_100": 0.925,
+      "median_lat_ms": 18.344799999795214,
+      "p99_lat_ms": 41.05549999985669,
+      "p50_lat_ms": 18.351899999288435,
+      "system": "qdrant",
+      "setting": "ef=128"
+    },
+    {
+      "name": "Qdrant HNSW (ef=256)",
+      "ndcg_at_10": 0.6484032131749053,
+      "recall_at_100": 0.925,
+      "median_lat_ms": 19.6943500004636,
+      "p99_lat_ms": 41.756399999940186,
+      "p50_lat_ms": 19.69660000031581,
+      "system": "qdrant",
+      "setting": "ef=256"
+    }
+  ]
+}
