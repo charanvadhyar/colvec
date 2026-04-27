@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-04-27T11:32:12.856975",
+  "system": "ivf_pq_rust",
+  "dataset": "msmarco",
+  "num_docs": 30000,
+  "num_tokens": 2320219,
+  "K_IVF": 1024,
+  "M_PQ": 32,
+  "bf_median_ms": 114.51369999940653,
+  "sweep": [
+    {
+      "nprobe": 1,
+      "recall": 0.7,
+      "latency_ms": 42.40345000016532,
+      "candidates": 16282.5,
+      "pct_corpus": 0.7017656522940291,
+      "speedup": 2.700575071107659
+    },
+    {
+      "nprobe": 2,
+      "recall": 0.725,
+      "latency_ms": 49.88619999949151,
+      "candidates": 31651,
+      "pct_corpus": 1.3641384714115348,
+      "speedup": 2.295498554722023
+    },
+    {
+      "nprobe": 4,
+      "recall": 0.775,
+      "latency_ms": 56.11514999964129,
+      "candidates": 53401.75,
+      "pct_corpus": 2.301582307532177,
+      "speedup": 2.0406913284583315
+    },
+    {
+      "nprobe": 8,
+      "recall": 0.825,
+      "latency_ms": 72.44620000074065,
+      "candidates": 94199.75,
+      "pct_corpus": 4.059950806367847,
+      "speedup": 1.580672278162772
+    },
+    {
+      "nprobe": 16,
+      "recall": 0.8500000000000001,
+      "latency_ms": 106.33919999963837,
+      "candidates": 164952.75,
+      "pct_corpus": 7.109361228401284,
+      "speedup": 1.0768719343365
+    },
+    {
+      "nprobe": 32,
+      "recall": 0.8250000000000001,
+      "latency_ms": 164.62980000051175,
+      "candidates": 305131.5,
+      "pct_corpus": 13.150978420571507,
+      "speedup": 0.695583059683305
+    },
+    {
+      "nprobe": 64,
+      "recall": 0.8250000000000001,
+      "latency_ms": 317.1077500001047,
+      "candidates": 543091.25,
+      "pct_corpus": 23.406896073172405,
+      "speedup": 0.36111920947806764
+    }
+  ]
+}
