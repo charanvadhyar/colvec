@@ -1,0 +1,24 @@
+{
+  "experiment": "residual_pq_vs_brute_force",
+  "dataset": "scifact_chunked",
+  "K_IVF": 256,
+  "M_PQ": 32,
+  "K_PQ": 256,
+  "results": [
+    {
+      "name": "Brute force (chunked, exact)",
+      "ndcg_at_10": 0.6690785919276232,
+      "recall_at_100": 0.891,
+      "median_lat_ms": 134.0604499564506,
+      "p99_lat_ms": 174.6771999169141
+    },
+    {
+      "name": "Residual PQ (brute force candidates)",
+      "ndcg_at_10": 0.66546351842593,
+      "recall_at_100": 0.8915555555555555,
+      "median_lat_ms": 2818.2836499763653,
+      "p99_lat_ms": 9323.682300047949
+    }
+  ],
+  "timestamp": "2026-05-05T08:51:31.828059"
+}
