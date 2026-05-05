@@ -26,14 +26,18 @@ load_model(device="cpu")
 
 # ---- Load SciFact corpus ----
 print("Loading SciFact corpus...")
-with open("data/scifact_corpus.pkl", "rb") as f:
+with open("data/scifact_corpus_chunked.pkl", "rb") as f:
     corpus = pickle.load(f)
 
 doc_ids          = corpus["doc_ids"]
 doc_vectors_list = corpus["vectors"]
 NUM_DOCS         = len(doc_ids)
 
-all_doc_vectors = torch.cat(doc_vectors_list, dim=0)
+all_doc_vectors = torch.cat(
+    [torch.from_numpy(v) if isinstance(v, np.ndarray) else v
+     for v in doc_vectors_list],
+    dim=0
+)
 
 doc_offsets = [0]
 for v in doc_vectors_list:
